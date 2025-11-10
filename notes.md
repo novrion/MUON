@@ -1,9 +1,7 @@
 # Projektarbete
 ```raw
-```
 Erik Dalsryd
 ed@kth.se
-```
 ```
 
 ## Tidslinje
