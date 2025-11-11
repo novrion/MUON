@@ -1,11 +1,8 @@
 import torch
 from torch import nn
-import torchvision
-import torchvision.transforms as transforms
+from torch.utils.data import TensorDataset, DataLoader
 
-N_EPOCHS = 10
-LR = 0.01
-MOMENTUM = 0.9
+N_EPOCHS = 1000
 
 
 class MUON(torch.optim.Optimizer):
@@ -15,39 +12,49 @@ class MUON(torch.optim.Optimizer):
 class NN(nn.Module):
     def __init__(self):
         super().__init__()
-        self.conv = nn.Conv2d(3, 6, 5)
+        self.lin = nn.Linear(4, 1)
 
     def forward(self, x):
-        return self.conv(x)
+        return self.lin(x)
+
+
+def get_dataset():
+    X = torch.tensor([[1.0, 2.0, 3.0, 4.0], [2.0, 3.0, 4.0, 5.0],
+                      [3.0, 4.0, 5.0, 6.0], [7.0, 8.0, 9.0, 10.0],
+                      [100.0, 101.0, 102.0, 103.0]])
+    y = torch.tensor([[5.0], [6.0], [7.0], [11.0], [104.0]])
+    dataset = TensorDataset(X, y)
+
+    dataloader = DataLoader(dataset, batch_size=2, shuffle=True)
+    return dataloader
 
 
 if __name__ == "__main__":
 
-    # CIFAR dataset
-    batch_size = 4
-    transform = transforms.Compose([transforms.ToTensor(),
-                                    transforms.Normalize(
-                                        (0.5, 0.5, 0.5),
-                                        (0.5, 0.5, 0.5)
-                                    )])
-    dataset = torchvision.datasets.CIFAR10(root="data", train=True,
-                                           download=True, transform=transform)
-    dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size,
-                                             shuffle=True, num_workers=2)
-
     # Neural net, loss function, and optimizer
     model = NN()
-    loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=0.01, momentum=0.9)
+    loss_fn = nn.MSELoss()
+    optimizer = torch.optim.AdamW(model.parameters(), lr=0.01)
 
     # Train
+    dataloader = get_dataset()
     for epoch in range(N_EPOCHS):
         for i, (X, y) in enumerate(dataloader):
-
             optimizer.zero_grad()
 
             logits = model(X)
             loss = loss_fn(logits, y)
 
+            # Logging
+            if epoch % 100 == 0:
+                print(f"Loss: {loss}")
+
             loss.backward()
             optimizer.step()
+
+    with torch.no_grad():
+        print(model(torch.tensor([[1.0, 2.0, 3.0, 4.0]])))
+        print(model(torch.tensor([[2.0, 3.0, 4.0, 5.0]])))
+        print(model(torch.tensor([[3.0, 4.0, 5.0, 6.0]])))
+        print(model(torch.tensor([[40.0, 41.0, 42.0, 43.0]])))
+        print(model(torch.tensor([[101.0, 102.0, 103.0, 104.0]])))
