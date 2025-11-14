@@ -30,7 +30,7 @@ def muon_it(grad, momentum, beta=0.95, ns_it=5):
     # Normalize and apply Newton-Schulz
     update = momentum / (momentum.norm(p='fro') + 1e-10)
     update = NewtonSchulz(update.reshape(len(update), -1),
-                          n_it=ns_it).view(update.shape)
+                          n_it=ns_it).reshape(update.shape)
 
     # Scale gradient by layer's size
     update *= max(1, grad.size(-2) / grad.size(-1))**0.5

@@ -16,8 +16,8 @@ model = SimpleCNN(num_classes=10)
 model.load_state_dict(torch.load(load_path))
 _, testloader = get_cifar(batch_size=batch_size)
 
-if not interactive: 
-    # --- Get Test Accuracy --- 
+if not interactive:
+    # --- Get Test Accuracy ---
     correct = 0
     total = 0
     with torch.no_grad():
@@ -33,7 +33,7 @@ else: # Unsure if works...
     # --- Interactive Testing ---
     for images, labels in testloader:
         logits = model(images)
-        
+
         print(f"Probability Predictions {torch.nn.functional.softmax(logits, dim=1) * 100} %")
 
         # Visualisation

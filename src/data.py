@@ -11,14 +11,14 @@ def get_cifar(batch_size: int, path: str = "./data/cifar_10"):
 
     transform = torchvision.transforms.Compose(
         [torchvision.transforms.ToTensor(),
-        torchvision.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+         torchvision.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
     # --- Download Train and Test Dataset --- 
     trainset = torchvision.datasets.CIFAR10(root=path, train=True, download=True, transform = transform)
     testset = torchvision.datasets.CIFAR10(root=path, train=False, download=True, transform = transform)
 
     # --- Put into loaders ---
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True)    
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True)
     testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=False,)
     return trainloader, testloader
 
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     images = images / 2 + 0.5 # Unnormalize 
     img_grid = torchvision.utils.make_grid(images)
     npimg = img_grid.numpy()
-    plt.figure(figsize=(8,4))
+    plt.figure(figsize=(8, 4))
     plt.imshow(np.transpose(npimg, (1, 2, 0))) # From [C, H, W] to [H, W, C] 
     plt.show()
 
