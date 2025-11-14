@@ -20,6 +20,7 @@ model = SimpleCNN(num_classes=10)
 loss_function = torch.nn.CrossEntropyLoss()
 
 # TODO: Are there other layers that are missing here?
+# TODO: MUON is SUPER SLOW!
 conv_params = [p for p in model.parameters() if len(p.shape) == 4]
 linear_params = [p for p in model.parameters() if len(p.shape) == 2]
 bias_params = [p for p in model.parameters() if len(p.shape) == 1]
