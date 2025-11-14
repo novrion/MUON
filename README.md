@@ -16,5 +16,5 @@ python3
 ```
 cd src
 uv sync
-uv run main.py
+uv run test.py
 ```
