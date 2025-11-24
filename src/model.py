@@ -11,13 +11,13 @@ class SimpleCNN(nn.Module):
         self.bn1 = nn.BatchNorm2d(64)
         self.conv2 = nn.Conv2d(64, 64, kernel_size=3, padding=1)
         self.bn2 = nn.BatchNorm2d(64)
-        
+
         # Block 2: Conv -> BN -> ReLU -> Conv -> BN -> ReLU -> MaxPool
         self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
         self.bn3 = nn.BatchNorm2d(128)
         self.conv4 = nn.Conv2d(128, 128, kernel_size=3, padding=1)
         self.bn4 = nn.BatchNorm2d(128)
-        
+
         # Block 3: Conv -> BN -> ReLU -> Conv -> BN -> ReLU -> MaxPool
         self.conv5 = nn.Conv2d(128, 256, kernel_size=3, padding=1)
         self.bn5 = nn.BatchNorm2d(256)
@@ -62,4 +62,5 @@ class SimpleCNN(nn.Module):
         x = self.relu(self.fc2(x))
         x = self.dropout(x)
         x = self.fc3(x)
+
         return x

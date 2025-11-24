@@ -1,2 +1,4 @@
-src/data/
-src/.venv/
+data/
+models/
+.venv/
+src/__pycache__/
