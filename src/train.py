@@ -14,12 +14,12 @@ TRAIN_METHODS = [MUON_TRAIN_METHOD, ADAMW_TRAIN_METHOD]
 
 
 def train(train_method):
-    epochs = 5
+    epochs = 2
     print_every = 10
     batch_size = 1024
     learning_rate_sgd = 5e-4
     learning_rate_muon = 0.3
-    learning_rate_adamw = 0.1
+    learning_rate_adamw = 1e-3
     momentum_weight_muon = 0.7
     momentum_weight_sgd = 0.9
     weight_decay_sgd = 1e-6 * batch_size

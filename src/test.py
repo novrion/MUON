@@ -11,7 +11,7 @@ batch_size = 256
 
 # --- Initialisation ---
 device = torch.device("mps" if torch.backends.mps.is_available()
-                      else ("cuda" if torch.cude.is_available()
+                      else ("cuda" if torch.cuda.is_available()
                       else "cpu"))
 
 model = SimpleCNN(num_classes=10).to(device)

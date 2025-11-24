@@ -1,9 +1,10 @@
 import torch
 
 
-def newton_schulz(M, n_iter=5):
-    assert M.ndim == 2
+def newton_schulz(G, n_iter=5):
+    assert G.ndim == 2
     a, b, c = 3.4445, -4.7770, 2.0315
+    M = G.bfloat16() / (G.norm() + 1e-7)
 
     transpose = M.shape[0] > M.shape[1]
     if transpose:
@@ -22,10 +23,7 @@ def newton_schulz(M, n_iter=5):
 
 def muon_it(grad, momentum, beta):
     momentum.mul_(beta).add_(grad)
-    update = momentum
-    if momentum.ndim == 4:
-        update = update.reshape(len(momentum), -1)
-    update /= (update.norm() + 1e-7)
+    update = momentum.reshape(len(momentum), -1) if momentum.ndim == 4 else momentum
     return newton_schulz(update)
 
 
