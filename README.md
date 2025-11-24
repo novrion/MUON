@@ -2,26 +2,19 @@
 An implementation of the MUON optimizer, applied for a classifier of the CIFAR-10 dataset, with tests to compare with AdamW.
 
 ## Setup
-
-### Required packages
-```
-uvicorn
-python
-```
-
-Run from root
 ```bash
+# Required packages:
+#   - uvicorn
+#   - python
+
 bash scripts/setup.sh
 ```
 
 ## Run
-
-### Train models
 ```bash
+# Train
 bash scripts/train.sh
-```
 
-### Test models
-```bash
+# Test
 bash scripts/test.sh
 ```
