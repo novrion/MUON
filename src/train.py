@@ -14,15 +14,12 @@ TRAIN_METHODS = [MUON_TRAIN_METHOD, ADAMW_TRAIN_METHOD]
 
 
 def train(train_method):
-    epochs = 2
+    epochs = 5
     print_every = 10
-    batch_size = 1024
-    learning_rate_sgd = 5e-4
-    learning_rate_muon = 0.3
+    batch_size = 2048
+    learning_rate_muon = 0.02
     learning_rate_adamw = 1e-3
     momentum_weight_muon = 0.7
-    momentum_weight_sgd = 0.9
-    weight_decay_sgd = 1e-6 * batch_size
     label_smoothing = 0.2
 
     # --- Initialisation ---
@@ -42,18 +39,16 @@ def train(train_method):
     if train_method == MUON_TRAIN_METHOD:
         muon_params = [p for p in model.parameters() if p.ndim ==
                        4 and p.requires_grad]
-        sgd_params = [p for p in model.parameters() if p.ndim !=
+        adamw_params = [p for p in model.parameters() if p.ndim !=
                       4 and p.requires_grad]
 
         muon_optimizer = MUON(
             muon_params,
             lr=learning_rate_muon,
             momentum_weight=momentum_weight_muon)
-        sgd_optimizer = torch.optim.SGD(
-            sgd_params,
-            lr=learning_rate_sgd,
-            momentum=momentum_weight_sgd,
-            weight_decay=weight_decay_sgd/learning_rate_sgd)
+        adamw_muon_optimizer = torch.optim.AdamW(
+                adamw_params,
+                lr=learning_rate_adamw)
 
     elif train_method == ADAMW_TRAIN_METHOD:
         adamw_optimizer = torch.optim.AdamW(
@@ -83,12 +78,12 @@ def train(train_method):
                 lr_scale = 1 - (current_step / total_train_steps)
                 for param_group in muon_optimizer.param_groups:
                     param_group['lr'] = learning_rate_muon * lr_scale
-                for param_group in sgd_optimizer.param_groups:
-                    param_group['lr'] = learning_rate_sgd * lr_scale
+                for param_group in adamw_muon_optimizer.param_groups:
+                    param_group['lr'] = learning_rate_adamw * lr_scale
                 current_step += 1
 
                 muon_optimizer.step()
-                sgd_optimizer.step()
+                adamw_muon_optimizer.step()
 
             elif train_method == ADAMW_TRAIN_METHOD:
                 adamw_optimizer.step()
