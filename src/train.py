@@ -96,13 +96,13 @@ def train(train_method):
                 adamw_muon_optimizer.step()
 
             elif train_method == ADAMW_TRAIN_METHOD:
-                for param_group in adamw_muon_optimizer.param_groups:
+                for param_group in adamw_optimizer.param_groups:
                     param_group['lr'] = learning_rate_adamw * lr_scale
                 adamw_optimizer.step()
 
             elif train_method == ADAM_TRAIN_METHOD:
-                for param_group in adamw_muon_optimizer.param_groups:
-                    param_group['lr'] = learning_rate_adamw * lr_scale
+                for param_group in adam_optimizer.param_groups:
+                    param_group['lr'] = learning_rate_adam * lr_scale
                 adam_optimizer.step()
 
             model.zero_grad(set_to_none=True)
