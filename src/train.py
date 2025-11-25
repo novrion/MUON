@@ -140,7 +140,7 @@ if __name__ == "__main__":
         print(f"Invalid train method '{
               train_method}' (options: {TRAIN_METHODS})")
         sys.exit(0)
-
+    print(f"Training {train_method}")
     model, data = train(train_method)
     save_model(model, f"./models/{train_method}_model.pth")
     save_data(data, f"./data/{train_method}_loss.csv")
