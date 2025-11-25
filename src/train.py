@@ -82,23 +82,27 @@ def train(train_method):
 
             loss.backward()
 
-            if train_method == MUON_TRAIN_METHOD:
+            # --- Learning rate scheduler ---
+            lr_scale = 1 - (current_step / total_train_steps)
+            current_step += 1
 
-                # --- Learning rate scheduler ---
-                lr_scale = 1 - (current_step / total_train_steps)
+            if train_method == MUON_TRAIN_METHOD:    
                 for param_group in muon_optimizer.param_groups:
                     param_group['lr'] = learning_rate_muon * lr_scale
                 for param_group in adamw_muon_optimizer.param_groups:
                     param_group['lr'] = learning_rate_adamw * lr_scale
-                current_step += 1
 
                 muon_optimizer.step()
                 adamw_muon_optimizer.step()
 
             elif train_method == ADAMW_TRAIN_METHOD:
+                for param_group in adamw_muon_optimizer.param_groups:
+                    param_group['lr'] = learning_rate_adamw * lr_scale
                 adamw_optimizer.step()
 
             elif train_method == ADAM_TRAIN_METHOD:
+                for param_group in adamw_muon_optimizer.param_groups:
+                    param_group['lr'] = learning_rate_adamw * lr_scale
                 adam_optimizer.step()
 
             model.zero_grad(set_to_none=True)
