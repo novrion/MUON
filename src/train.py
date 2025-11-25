@@ -10,15 +10,17 @@ from model import SimpleCNN
 
 MUON_TRAIN_METHOD = "muon"
 ADAMW_TRAIN_METHOD = "adamw"
-TRAIN_METHODS = [MUON_TRAIN_METHOD, ADAMW_TRAIN_METHOD]
+ADAM_TRAIN_METHOD = "adam"
+TRAIN_METHODS = [MUON_TRAIN_METHOD, ADAMW_TRAIN_METHOD, ADAM_TRAIN_METHOD]
 
 
 def train(train_method):
-    epochs = 1
+    epochs = 40
     print_every = 10
     batch_size = 2048
     learning_rate_muon = 0.02
     learning_rate_adamw = 1e-3
+    learning_rate_adam = 1e-3
     momentum_weight_muon = 0.7
     label_smoothing = 0.2
 
@@ -55,6 +57,11 @@ def train(train_method):
             model.parameters(),
             lr=learning_rate_adamw)
 
+    elif train_method == ADAM_TRAIN_METHOD:
+        adam_optimizer = torch.optim.Adam(
+                model.parameters(),
+                lr=learning_rate_adam)
+
     # --- Training loop ---
     print("Starting training...")
 
@@ -90,6 +97,9 @@ def train(train_method):
 
             elif train_method == ADAMW_TRAIN_METHOD:
                 adamw_optimizer.step()
+
+            elif train_method == ADAM_TRAIN_METHOD:
+                adam_optimizer.step()
 
             model.zero_grad(set_to_none=True)
 
