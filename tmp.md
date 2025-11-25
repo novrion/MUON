@@ -1,0 +1,9 @@
+Testing MUON model...
+40it [00:01, 20.43it/s]
+Test accuracy 0.8323
+Testing AdamW model...
+40it [00:01, 21.85it/s]
+Test accuracy 0.7935
+Testing Adam model...
+40it [00:01, 21.90it/s]
+Test accuracy 0.7921
