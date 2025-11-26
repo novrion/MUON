@@ -16,7 +16,7 @@ device = torch.device("mps" if torch.backends.mps.is_available()
 
 model = SimpleCNN(num_classes=10).to(device)
 try:
-    model.load_state_dict(torch.load(load_path))
+    model.load_state_dict(torch.load(load_path, map_location=device))
 except Exception:
     print(f"Could not load model from '{load_path}'")
     sys.exit(0)

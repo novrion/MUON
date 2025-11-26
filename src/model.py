@@ -37,6 +37,7 @@ class SimpleCNN(nn.Module):
         self.relu = nn.ReLU()
 
     def forward(self, x):
+
         # Block 1: 32x32 -> 16x16
         x = self.relu(self.bn1(self.conv1(x)))
         x = self.relu(self.bn2(self.conv2(x)))

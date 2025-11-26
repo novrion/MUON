@@ -1,7 +1,6 @@
 import torch
 
 
-@torch.compile
 def newton_schulz(G, n_iter=5):
     assert G.ndim == 2
     a, b, c = 3.4445, -4.7770, 2.0315

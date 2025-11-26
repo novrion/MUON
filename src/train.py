@@ -15,14 +15,14 @@ TRAIN_METHODS = [MUON_TRAIN_METHOD, ADAMW_TRAIN_METHOD, ADAM_TRAIN_METHOD]
 
 
 def train(train_method):
-    epochs = 40
+    epochs = 20
     print_every = 10
     batch_size = 2048
-    learning_rate_muon = 0.02
-    learning_rate_adamw = 1e-3
-    learning_rate_adam = 1e-3
-    momentum_weight_muon = 0.7
-    label_smoothing = 0.2
+    learning_rate_muon = 0.03
+    learning_rate_adamw = 3e-3
+    learning_rate_adam = 3e-3
+    momentum_weight_muon = 0.95
+    label_smoothing = 0.0
 
     # --- Initialisation ---
     print("Intialising...")
@@ -42,15 +42,15 @@ def train(train_method):
         muon_params = [p for p in model.parameters() if p.ndim ==
                        4 and p.requires_grad]
         adamw_params = [p for p in model.parameters() if p.ndim !=
-                      4 and p.requires_grad]
+                        4 and p.requires_grad]
 
         muon_optimizer = MUON(
             muon_params,
             lr=learning_rate_muon,
             momentum_weight=momentum_weight_muon)
         adamw_muon_optimizer = torch.optim.AdamW(
-                adamw_params,
-                lr=learning_rate_adamw)
+            adamw_params,
+            lr=learning_rate_adamw)
 
     elif train_method == ADAMW_TRAIN_METHOD:
         adamw_optimizer = torch.optim.AdamW(
@@ -59,8 +59,8 @@ def train(train_method):
 
     elif train_method == ADAM_TRAIN_METHOD:
         adam_optimizer = torch.optim.Adam(
-                model.parameters(),
-                lr=learning_rate_adam)
+            model.parameters(),
+            lr=learning_rate_adam)
 
     # --- Training loop ---
     print("Starting training...")
@@ -86,23 +86,23 @@ def train(train_method):
             lr_scale = 1 - (current_step / total_train_steps)
             current_step += 1
 
-            if train_method == MUON_TRAIN_METHOD:    
-                for param_group in muon_optimizer.param_groups:
-                    param_group['lr'] = learning_rate_muon * lr_scale
-                for param_group in adamw_muon_optimizer.param_groups:
-                    param_group['lr'] = learning_rate_adamw * lr_scale
+            if train_method == MUON_TRAIN_METHOD:
+                #for param_group in muon_optimizer.param_groups:
+                #    param_group['lr'] = learning_rate_muon * lr_scale
+                #for param_group in adamw_muon_optimizer.param_groups:
+                #    param_group['lr'] = learning_rate_adamw * lr_scale
 
                 muon_optimizer.step()
                 adamw_muon_optimizer.step()
 
             elif train_method == ADAMW_TRAIN_METHOD:
-                for param_group in adamw_optimizer.param_groups:
-                    param_group['lr'] = learning_rate_adamw * lr_scale
+                #for param_group in adamw_optimizer.param_groups:
+                #    param_group['lr'] = learning_rate_adamw * lr_scale
                 adamw_optimizer.step()
 
             elif train_method == ADAM_TRAIN_METHOD:
-                for param_group in adam_optimizer.param_groups:
-                    param_group['lr'] = learning_rate_adam * lr_scale
+                #for param_group in adam_optimizer.param_groups:
+                #    param_group['lr'] = learning_rate_adam * lr_scale
                 adam_optimizer.step()
 
             model.zero_grad(set_to_none=True)
@@ -137,8 +137,7 @@ def save_data(data, path):
 if __name__ == "__main__":
     train_method = sys.argv[1]
     if train_method not in TRAIN_METHODS:
-        print(f"Invalid train method '{
-              train_method}' (options: {TRAIN_METHODS})")
+        print(f"Invalid train method '{train_method}' (options: {TRAIN_METHODS})")
         sys.exit(0)
     print(f"Training {train_method}")
     model, data = train(train_method)

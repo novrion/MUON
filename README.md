@@ -7,10 +7,14 @@ An implementation of the MUON optimizer, applied for a classifier of the CIFAR-1
 #   - uvicorn
 #   - python
 
-# Optional packages (for loss_graph):
+# Optional packages (for loss graph):
 #   - g++
 
+# Normal install
 bash scripts/setup.sh
+
+# No cloud compute
+bash scripts/setup.sh minimal
 ```
 
 ## Run
