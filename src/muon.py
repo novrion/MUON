@@ -1,24 +1,24 @@
 import torch
 
 
-def newton_schulz(G, n_iter=5):
-    assert G.ndim == 2
+def newton_schulz(P, n_iter=5):
+    assert P.ndim == 2
     a, b, c = 3.4445, -4.7770, 2.0315
-    M = G.float() / (G.norm() + 1e-7)
+    G = P.float() / (P.norm() + 1e-7)
 
-    transpose = M.shape[0] > M.shape[1]
+    transpose = G.shape[0] > G.shape[1]
     if transpose:
-        M = M.T
+        G = G.T
 
     for _ in range(n_iter):
-        A = M@M.T
+        A = G@G.T
         B = b*A + c*A@A
-        M = a*M + B@M
+        G = a*G + B@G
 
     if transpose:
-        M = M.T
+        G = G.T
 
-    return M
+    return G
 
 
 def muon_it(grad, momentum, beta):
